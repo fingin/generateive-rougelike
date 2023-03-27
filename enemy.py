@@ -13,7 +13,17 @@ class Enemy:
         self.hp = random.randint(GameConfig.ENEMY_MIN_HP, GameConfig.ENEMY_MAX_HP)
 
     def move(self, game_map, player):
-        # Implement enemy movement and AI logic here
+        dx = player.x - self.x
+        dy = player.y - self.y
+        distance = math.sqrt(dx * dx + dy * dy)
+
+        if distance < GameConfig.ENEMY_DETECTION_RANGE:
+            dx = int(round(dx / distance))
+            dy = int(round(dy / distance))
+
+            if not game_map.is_blocked(self.x + dx, self.y + dy):
+                self.x += dx
+                self.y += dy
 
     def attack(self, target):
         # Implement enemy attack logic here

@@ -11,18 +11,39 @@ class Boss:
         self.speed = GameConfig.BOSS_SPEED
         self.hp = GameConfig.BOSS_HP
         self.abilities = self.generate_abilities()
-
+       
+       
     def generate_abilities(self):
-        # Implement boss ability generation logic here
+        abilities = []
+        for i in range(GameConfig.BOSS_ABILITY_COUNT):
+            abilities.append(random.choice(GameConfig.ABILITY_LIST))
+        return abilities
 
     def move(self, game_map, player):
-        # Implement boss movement and AI logic here
+        dx = player.x - self.x
+        dy = player.y - self.y
+        distance = math.sqrt(dx * dx + dy * dy)
+
+        if distance < GameConfig.BOSS_DETECTION_RANGE:
+            dx = int(round(dx / distance))
+            dy = int(round(dy / distance))
+
+            if not game_map.is_blocked(self.x + dx, self.y + dy):
+                self.x += dx
+                self.y += dy
+
+    def use_ability(self, ability, target):
+        if ability == "fireball":
+            # Implement fireball ability logic here
+        elif ability == "freeze":
+            # Implement freeze ability logic here
+        # Add more abilities as needed
+
+    
 
     def attack(self, target):
         # Implement boss attack logic here
 
-    def use_ability(self, ability, target):
-        # Implement boss ability usage logic here
 
     def update(self, game_map, player):
         self.move(game_map, player)

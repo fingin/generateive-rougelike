@@ -42,3 +42,27 @@ class GameMap:
                     room.y < other_room.y + other_room.height and
                     room.y + room.height > other_room.y):
                 return True
+
+class Graph:
+    def __init__(self, game_map):
+        self.game_map = game_map
+
+    def in_bounds(self, node):
+        x, y = node
+        return 0 <= x < self.game_map.width and 0 <= y < self.game_map.height
+
+    def passable(self, node):
+        return not self.game_map.is_blocked(*node)
+
+    def get_neighbors(self, node):
+        x, y = node
+        neighbors = [(x + dx, y + dy) for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]]
+        neighbors = filter(self.in_bounds, neighbors)
+        neighbors = filter(self.passable, neighbors)
+        return neighbors
+
+    def get_cost(self, current, next_node):
+        return 1  # Assuming a uniform cost of 1 for each movement
+
+    def heuristic(self, goal, next_node):
+        return abs(goal[0] - next_node[0]) + abs(goal[1] - next_node[1])
